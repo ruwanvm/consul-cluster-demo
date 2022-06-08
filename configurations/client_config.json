@@ -1,0 +1,12 @@
+{
+    "server": false,
+    "datacenter": "eu-central",
+    "data_dir": "/var/consul",
+    "encrypt": "{_ENCRYPT_KEY_}",
+    "log_level": "INFO",
+    "enable_syslog": true,
+    "leave_on_terminate": true,
+    "start_join": [
+        "10.1.0.4"
+    ]
+}

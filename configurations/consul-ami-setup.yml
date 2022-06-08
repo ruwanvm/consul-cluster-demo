@@ -1,0 +1,64 @@
+---
+- hosts: all
+  vars:
+    consul_version: consul_version
+  gather_facts: false
+  tasks:
+    - name: update pakages
+      become: yes
+      yum:
+        name: '*'
+        state: latest
+    - name: Download consul package and add to binaries
+      become: yes
+      unarchive:
+        src: https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip
+        dest: /usr/bin/
+        remote_src: yes
+    - name: Create a Consul Server Service
+      become: yes
+      copy:
+        src: consul-server.service
+        dest: /etc/systemd/system/consul.service
+        mode: "644"
+    - name: Create a Consul Client Service
+      become: yes
+      copy:
+        src: consul-client.service
+        dest: /etc/systemd/system/consul-client.service
+        mode: "644"
+    - name: Reload the system daemons
+      become: yes
+      command: systemctl daemon-reload
+    - name: Check consul executable
+      command: consul version
+      register: consul_version
+    - name: Create a Consul Server config
+      become: yes
+      copy:
+        src: consul-server.service
+        dest: /etc/consul.d/config.json
+        mode: "644"
+    - name: Create a Consul Client config
+      become: yes
+      copy:
+        src: consul-client.service
+        dest: /etc/consul.d/client/config.json
+        mode: "644"
+    - name: Generate consul secret
+      command: consul keygen
+      register: CONSUL_SECRET
+    - name: Add secret to consul server config file
+      become: yes
+      replace:
+        path: /etc/consul.d/config.json
+        regexp: "{_ENCRYPT_KEY_}"
+        replace: "{{ CONSUL_SECRET['stdout'] }}"
+    - name: Add secret to consul client config file
+      become: yes
+      replace:
+        path: /etc/consul.d/client/config.json
+        regexp: "{_ENCRYPT_KEY_}"
+        replace: "{{ CONSUL_SECRET['stdout'] }}"
+
+

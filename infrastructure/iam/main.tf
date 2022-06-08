@@ -22,22 +22,30 @@ resource "aws_iam_policy" "consul_iam_role_policy" {
       }
     ]
   })
+  tags = {
+    "Name"       = "consul_iam_role_policy"
+    "Managed-by" = "Terraform"
+  }
 }
 
 resource "aws_iam_role" "consul_iam_role" {
-  name = "consul_iam_role"
+  name        = "consul_iam_role"
   description = "Allow Consul instances to access AWS resources"
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [{
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
+    "Version" : "2012-10-17",
+    "Statement" : [{
+      "Action" : "sts:AssumeRole",
+      "Principal" : {
+        "Service" : "ec2.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect" : "Allow",
+      "Sid" : ""
     }]
   })
+  tags = {
+    "Name"       = "consul_iam_role"
+    "Managed-by" = "Terraform"
+  }
 }
 
 resource "aws_iam_policy_attachment" "consul_iam_role_policy_attachment" {
@@ -49,4 +57,8 @@ resource "aws_iam_policy_attachment" "consul_iam_role_policy_attachment" {
 resource "aws_iam_instance_profile" "consul_instance_profile" {
   name = "consul_instance_profile"
   role = aws_iam_role.consul_iam_role.name
+  tags = {
+    "Name"       = "consul_iam_instance_profile"
+    "Managed-by" = "Terraform"
+  }
 }
