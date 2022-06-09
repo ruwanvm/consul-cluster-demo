@@ -33,18 +33,30 @@
     - name: Check consul executable
       command: consul version
       register: consul_version
+    - name: create consul.d directory
+      become: yes
+      file:
+        path: /etc/consul.d
+        state: directory
+        mode: "755"
+    - name: create consul.d directory
+      become: yes
+      file:
+        path: /etc/consul.d/client
+        state: directory
+        mode: "755"
     - name: Create a Consul Server config
       become: yes
       copy:
-        src: consul-server.service
+        src: server_config.json
         dest: /etc/consul.d/config.json
-        mode: "644"
+        mode: "744"
     - name: Create a Consul Client config
       become: yes
       copy:
-        src: consul-client.service
+        src: client_config.json
         dest: /etc/consul.d/client/config.json
-        mode: "644"
+        mode: "744"
     - name: Generate consul secret
       command: consul keygen
       register: CONSUL_SECRET
