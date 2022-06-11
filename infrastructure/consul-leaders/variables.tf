@@ -1,9 +1,7 @@
-####### Provider Configurations #########################
 variable "aws_profile" {
   description = "AWS Profile to create resources using Terraform"
   default     = "default"
 }
-
 variable "aws_region" {
   description = "AWS region to create resources using Terraform"
 }
@@ -20,9 +18,6 @@ variable "iam_instance_profile" {
 variable "keypair_id" {
   description = "AWS SSH keypair id"
 }
-variable "consul_bucket" {
-  description = "Consul configurations bucket"
-}
 variable "subnet_id_1" {
   description = "consul public subnet 1a"
 }
@@ -32,4 +27,6 @@ variable "subnet_id_2" {
 variable "subnet_id_3" {
   description = "consul public subnet 1c"
 }
-variable "consul_version" {}
+variable "leader_public_ip" {
+  description = "static ip for leader network primary"
+}

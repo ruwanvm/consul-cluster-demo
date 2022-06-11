@@ -1,4 +1,0 @@
-#!/bin/sh
-sudo mkdir /var/consul
-sudo mkdir /etc/consul.d/
-sudo systemctl start consul

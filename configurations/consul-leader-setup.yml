@@ -1,9 +1,0 @@
----
-- hosts: all
-  vars:
-    consul_bucket: consul_bucket
-  gather_facts: false
-  tasks:
-    - name: Start Consul Leader
-      become: yes
-      command: systemctl start consul

@@ -27,12 +27,6 @@
         src: consul-client.service
         dest: /etc/systemd/system/consul-client.service
         mode: "644"
-    - name: Reload the system daemons
-      become: yes
-      command: systemctl daemon-reload
-    - name: Check consul executable
-      command: consul version
-      register: consul_version
     - name: create consul.d directory
       become: yes
       file:
@@ -72,5 +66,11 @@
         path: /etc/consul.d/client/config.json
         regexp: "{_ENCRYPT_KEY_}"
         replace: "{{ CONSUL_SECRET['stdout'] }}"
+    - name: Reload the system daemons
+      become: yes
+      command: systemctl daemon-reload
+    - name: Check consul executable
+      command: consul version
+      register: consul_version
 
 

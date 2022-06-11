@@ -1,3 +1,5 @@
+
+
 data "aws_security_group" "consul_security_group" {
   id = var.security_group
 }
@@ -24,7 +26,10 @@ resource "aws_launch_configuration" "consul_server_launch_configuration" {
   security_groups             = [data.aws_security_group.consul_security_group.id]
   key_name                    = var.keypair_id
   associate_public_ip_address = true
-  user_data                   = file("/tmp/server-userdata")
+  user_data                   = <<EOF
+#!/bin/sh
+sudo systemctl start consul
+EOF
   lifecycle {
     create_before_destroy = true
   }
@@ -38,7 +43,10 @@ resource "aws_launch_configuration" "consul_client_launch_configuration" {
   security_groups             = [data.aws_security_group.consul_security_group.id]
   key_name                    = var.keypair_id
   associate_public_ip_address = true
-  user_data                   = file("/tmp/client-userdata")
+  user_data                   = <<EOF
+#!/bin/sh
+sudo systemctl start consul-client
+EOF
   lifecycle {
     create_before_destroy = true
   }
@@ -47,7 +55,7 @@ resource "aws_launch_configuration" "consul_client_launch_configuration" {
 resource "aws_autoscaling_group" "consul_servers_auto_scaling_group" {
   max_size             = 6
   min_size             = 0
-  desired_capacity     = 1
+  desired_capacity     = 3
   name                 = "consul_servers_auto_scaling_group"
   launch_configuration = aws_launch_configuration.consul_server_launch_configuration.name
   vpc_zone_identifier  = [data.aws_subnet.consul_subnet_1.id, data.aws_subnet.consul_subnet_2.id, data.aws_subnet.consul_subnet_3.id]
@@ -70,7 +78,7 @@ resource "aws_autoscaling_group" "consul_servers_auto_scaling_group" {
 resource "aws_autoscaling_group" "consul_client_auto_scaling_group" {
   max_size             = 6
   min_size             = 0
-  desired_capacity     = 1
+  desired_capacity     = 3
   name                 = "consul_clients_auto_scaling_group"
   launch_configuration = aws_launch_configuration.consul_client_launch_configuration.name
   vpc_zone_identifier  = [data.aws_subnet.consul_subnet_1.id, data.aws_subnet.consul_subnet_2.id, data.aws_subnet.consul_subnet_3.id]

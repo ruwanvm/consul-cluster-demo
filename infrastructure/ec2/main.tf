@@ -23,6 +23,11 @@ data "http" "workstation_ip" {
 data "aws_vpc" "consul_vpc" {
   id = var.consul_vpc_id
 }
+
+resource "aws_eip" "consul_leader_eip" {
+  vpc = true
+}
+
 resource "aws_security_group" "consul_server_sg" {
   name   = "consul_server_sg"
   vpc_id = data.aws_vpc.consul_vpc.id

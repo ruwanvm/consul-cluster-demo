@@ -42,7 +42,8 @@ resource "null_resource" "setup_consul" {
     command     = "ansible-playbook -u ${local.ssh_user} -i ${aws_instance.consul_ami_master.public_ip}, --private-key ../consul.pem consul-ami-setup.yml -e consul_version=${var.consul_version}"
   }
   triggers = {
-    build_number = timestamp()
+    consul_version  = var.consul_version
+    master_instance = aws_instance.consul_ami_master.id
   }
   depends_on = [
     aws_instance.consul_ami_master
