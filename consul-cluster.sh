@@ -297,14 +297,14 @@ else
 fi
 
 if [ $? -eq 0 ]; then
-  SERVER_AUTOSCALE=$(terraform output -raw consul_server_autoscale_group)
-  CLIENT_AUTOSCALE=$(terraform output -raw consul_client_autoscale_group)
-  aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${SERVER_AUTOSCALE}" --desired-capacity 6 --profile "${AWS_PROFILE}"
-  aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${CLIENT_AUTOSCALE}" --desired-capacity 6 --profile "${AWS_PROFILE}"
-  echo "waiting for Autoscaling to be completed ..."
-  sleep 60
-  aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${SERVER_AUTOSCALE}" --desired-capacity 3 --profile "${AWS_PROFILE}"
-  aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${CLIENT_AUTOSCALE}" --desired-capacity 3 --profile "${AWS_PROFILE}"
+  # SERVER_AUTOSCALE=$(terraform output -raw consul_server_autoscale_group)
+  # CLIENT_AUTOSCALE=$(terraform output -raw consul_client_autoscale_group)
+  # aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${SERVER_AUTOSCALE}" --desired-capacity 6 --profile "${AWS_PROFILE}"
+  # aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${CLIENT_AUTOSCALE}" --desired-capacity 6 --profile "${AWS_PROFILE}"
+  # echo "waiting for Autoscaling to be completed ..."
+  # sleep 60
+  # aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${SERVER_AUTOSCALE}" --desired-capacity 3 --profile "${AWS_PROFILE}"
+  # aws autoscaling update-auto-scaling-group --auto-scaling-group-name "${CLIENT_AUTOSCALE}" --desired-capacity 3 --profile "${AWS_PROFILE}"
   cd ../..
   echo "======================================================================"
   echo "Consul Cluster is created with version ${NEW_CONSUL_VERSION}"
