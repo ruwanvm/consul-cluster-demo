@@ -33,3 +33,4 @@ override.tf.json
 
 **/*.pem
 **/*.lock.hcl
+consul_cluster.version
